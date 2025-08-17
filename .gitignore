@@ -1,0 +1,19 @@
+# Kotlin/Android
+.gradle/
+.idea/
+*.iml
+/local.properties
+.DS_Store
+
+# Build outputs
+/build
+/captures
+*.apk
+*.ap_
+
+# Caches
+/.cxx
+/.externalNativeBuild
+
+# Android Studio
+.vscode/
