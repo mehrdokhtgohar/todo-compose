@@ -17,13 +17,15 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import com.example.myapplication.data.ThemePreference
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TaskListScreen() {
+fun TaskListScreen(paddingValues: PaddingValues) {
     var taskText by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val isDarkMode by ThemePreference.isDarkMode(context).collectAsState(initial = false)
     val scope = rememberCoroutineScope()
     val taskList = remember { mutableStateListOf<Task>() }
     val snackbarHostState = remember { SnackbarHostState() }
@@ -37,7 +39,6 @@ fun TaskListScreen() {
         }
     }
 
-    // 👇 Scaffold wraps the screen layout
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { paddingValues ->
@@ -48,6 +49,20 @@ fun TaskListScreen() {
                 .padding(paddingValues)
                 .padding(16.dp) // your own padding
         ) {
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                Text("Dark Mode")
+                Switch(
+                    checked = isDarkMode,
+                    onCheckedChange = {
+                        scope.launch {
+                            ThemePreference.setDarkMode(context, it)
+                        }
+                    }
+                )
+            }
             Text(
                 text = "📝 My Tasks",
                 style = MaterialTheme.typography.headlineMedium,
